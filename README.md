@@ -16,3 +16,4 @@ You can click [here](https://debrx.github.io/dino-hack/) to play online.
 ADD NAME
 * Deborah
 * Ayush
+* Mamoona
