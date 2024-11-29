@@ -15,4 +15,4 @@ You can click [here](https://debrx.github.io/dino-hack/) to play online.
 ## Collaborators/Team Mates
 ADD NAME
 * Deborah
-* 
+* Ayush
