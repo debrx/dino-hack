@@ -13,5 +13,7 @@ Our submission to the [Aubrey Chen's Hackathon](https://brainrot-jia-seed-hackat
 You can click [here](https://debrx.github.io/dino-hack/) to play online.
 
 ## Collaborators/Team Mates
+ADD NAME
 * Deborah
 * Ayush
+* Mamoona
