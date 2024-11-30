@@ -201,6 +201,48 @@ Runner.sounds = {
   SCORE: 'offline-sound-reached'
 };
 
+//hahahahhahahhahahahaha
+
+let canJump = false; // Flag to control jumping
+
+function askQuiz() {
+    const question = "What is 5 + 3?"; // Example question
+    const correctAnswer = "8";         // Correct answer
+
+    // Prompt the player with the question
+    const playerAnswer = prompt(question, "Enter your answer");
+
+    // Check if the answer is correct
+    if (playerAnswer === correctAnswer) {
+        alert("Correct! You can jump now.");
+        canJump = true; // Allow jumping
+    } else {
+        alert("Wrong answer. Try again!");
+        canJump = false; // Block jumping
+    }
+}
+
+
+document.addEventListener('keydown', function(event) {
+  // Check for jump keys and the `canJump` flag
+  if (Runner.keycodes.JUMP[event.keyCode] && canJump) {
+      trex.startJump(currentSpeed); // Allow jump
+      canJump = false; // Reset flag after jumping
+  } else if (Runner.keycodes.JUMP[event.keyCode] && !canJump) {
+      alert("Answer the quiz correctly to jump!");
+  } else if (Runner.keycodes.DUCK[event.keyCode]) {
+      trex.startDuck(); // Duck action remains unaffected
+  } else if (Runner.keycodes.RESTART[event.keyCode]) {
+      game.restart(); // Restart the game
+  }
+});
+
+
+// Example: Trigger quiz every 10 seconds
+setInterval(() => {
+  askQuiz();
+}, 10000);
+
 
 /**
  * Key code mapping.

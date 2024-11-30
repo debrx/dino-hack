@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Question Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    #questionForm {
+      display: none;
+      margin-top: 20px;
+      opacity: 0.3;
+    }
+    .success {
+      color: green;
+      font-weight: bold;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Question Form</h1>
+  <p id="message">A question will appear shortly...</p>
+  
+  <form id="questionForm" onsubmit="return checkAnswer(event)">
+    <label for="answer">What is 5 + 3?</label><br><br>
+    <input type="text" id="answer" name="answer" required>
+    <br><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    // Initialize variables
+    let canJump = false;
+    const correctAnswer = "8";
+    const displayInterval = 5000; // Time interval in milliseconds (5 seconds)
+
+    // Function to display the question form after the interval
+    setTimeout(() => {
+      document.getElementById("questionForm").style.display = "block";
+      document.getElementById("message").textContent = "Answer the question below:";
+    }, displayInterval);
+
+    // Function to check the answer
+    function checkAnswer(event) {
+      event.preventDefault(); // Prevent form from reloading the page
+      const userAnswer = document.getElementById("answer").value.trim();
+
+      if (userAnswer === correctAnswer) {
+        canJump = true;
+        document.getElementById("message").textContent = "Correct! You can now jump.";
+        document.getElementById("message").className = "success";
+      } else {
+        canJump = false;
+        document.getElementById("message").textContent = "Incorrect. Try again!";
+        document.getElementById("message").className = "error";
+      }
+
+      console.log("Can Jump:", canJump); // For debugging
+    }
+  </script>
+</body>
+</html>
