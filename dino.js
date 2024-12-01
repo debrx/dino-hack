@@ -213,7 +213,7 @@ const quizQuestions = [
     { question: "Which wolf in the pack has the most rizz?", correctAnswer: "Alpha" },
     { question: "What happens to your food if you become a bigback?", correctAnswer: "Fanum tax" },
     {question: "What is the best drink you’ve ever had?", correctAnswer: "prime"},
-    {question: "Fill in the blank (with the correct 2024 word): He pulls all the girls in with his ____.", correctAnswer: "Rizz"},
+    {question: "Fill in the blank : He pulls all the girls in with his ____.", correctAnswer: "Rizz"},
     {question: "Finish the quote: Just put the ___ in the bag.", correctAnswer: "fries"},
     {question: "What is the opposite of a sigma?", correctAnswer: "beta"},
     {question: "Who should you stick your gyatt out for", correctAnswer: "the rizzler"},
