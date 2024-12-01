@@ -205,12 +205,24 @@ Runner.sounds = {
 
 let canJump = false; // Flag to control jumping
 
+const quizQuestions = [
+    { question: "What is the most skibidi state where people are so not cool?", correctAnswer: "Ohio" },
+    { question: "What is the most iconic show of all time?", correctAnswer: "Skibidi Toilet" },
+    { question: "How do you get the most alpha jawline?", correctAnswer: "Mewing" },
+    { question: "What is the most delectable part of a pookie?", correctAnswer: "Gyatt" },
+    { question: "Which wolf in the pack has the most rizz?", correctAnswer: "Alpha" },
+    { question: "What happens to your food if you become a bigback?", correctAnswer: "Fanum tax" }
+];
+
 function askQuiz() {
-    const question = "What is 5 + 3?"; // Example question
-    const correctAnswer = "8";         // Correct answer
+  // Randomly select a quiz question
+    const randomIndex = Math.floor(Math.random() * quizQuestions.length);
+    const selectedQuiz = quizQuestions[randomIndex];
+    const question = selectedQuiz.question;
+    const correctAnswer = selectedQuiz.correctAnswer.toLowerCase();
 
     // Prompt the player with the question
-    const playerAnswer = prompt(question, "Enter your answer");
+    const playerAnswer = prompt(question, "Enter your answer").toLowerCase();
 
     // Check if the answer is correct
     if (playerAnswer === correctAnswer) {
@@ -241,7 +253,7 @@ document.addEventListener('keydown', function(event) {
 // Example: Trigger quiz every 10 seconds
 setInterval(() => {
   askQuiz();
-}, 10000);
+}, 20000);
 
 
 /**

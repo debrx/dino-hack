@@ -10,9 +10,15 @@ body {
   --google-gray-500: rgb(154, 160, 166);
   --google-gray-600: rgb(128, 134, 139);
   --google-gray-700: rgb(95, 99, 105);
-  background-color: #fff;
+  background-color: #000000;
+  background-repeat: no-repeat;
+  background-size: cover;
   color: var(--google-gray-700);
   word-wrap: break-word;
+}
+
+.runner-canvas{
+  background-size: 600px;
 }
 
 html {
@@ -48,7 +54,7 @@ html {
 }
 
 h1 {
-  color: var(--google-gray-900);
+  color: var(--google-gray-700);
   font-size: 1.6em;
   font-weight: normal;
   line-height: 1.25em;
