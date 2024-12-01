@@ -1,7 +1,7 @@
 # T-Rex Runner
 
 Welcome to our Dino run, but beware it's not as it seems.
-If you can't handle our questions just bbut the fries in bag and hand us that dub
+If you can't handle our questions just put the fries in bag and hand us that dub
 
 Our submission to the [Aubrey Chen's Hackathon](https://brainrot-jia-seed-hackathon.devpost.com/)
 ## Controls
