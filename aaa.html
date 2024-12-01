@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+            background: #f7f7f7;
+            border: 2px solid #333;
+            margin: 50px auto;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .visible {
+            display: block;
+        }
+        #startSpeech {
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="200"></canvas>
+
+    <!-- Modal for Quiz -->
+    <div class="overlay" id="overlay"></div>
+    <div class="modal" id="quizModal">
+        <h3 id="quizQuestion">Loading question...</h3>
+        <button id="startSpeech">Speak Your Answer</button>
+        <p id="quizFeedback"></p>
+    </div>
+
+    <script>
+        // Game Elements
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let dino = { x: 50, y: 150, width: 30, height: 30, jumping: false, velocityY: 0 };
+let obstacles = [];
+let score = 0;
+
+let gravity = 0.5;
+let gameSpeed = 2;
+let gamePaused = false; // Add a flag to pause the game during the quiz
+
+// Quiz Elements
+const overlay = document.getElementById("overlay");
+const quizModal = document.getElementById("quizModal");
+const quizQuestion = document.getElementById("quizQuestion");
+const quizFeedback = document.getElementById("quizFeedback");
+const startSpeech = document.getElementById("startSpeech");
+let canJump = false;
+
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognizer = new SpeechRecognition();
+recognizer.lang = "en-US";
+recognizer.interimResults = false;
+recognizer.maxAlternatives = 1;
+
+const quizQuestions = [
+    { question: "What is Amazon's subscription service?", answer: "prime" },
+    { question: "Name the capital of France.", answer: "paris" },
+    { question: "What is the color of the sky?", answer: "blue" },
+];
+
+let isRecognizing = false; // Flag to track if recognition is running
+
+// Start Speech Recognition
+startSpeech.onclick = function () {
+    if (isRecognizing) {
+        quizFeedback.textContent = "Already listening... Please wait.";
+        return; // Prevent starting again
+    }
+
+    quizFeedback.textContent = "Listening...";
+    isRecognizing = true; // Set the flag
+    recognizer.start();
+};
+
+// Handle Speech Recognition Results
+recognizer.onresult = function (event) {
+    const spokenAnswer = event.results[0][0].transcript.trim().toLowerCase();
+    quizFeedback.textContent = `You said: "${spokenAnswer}"`;
+
+    if (spokenAnswer === randomQuiz.answer.toLowerCase()) {
+        quizFeedback.textContent += " - Correct!";
+        canJump = true;
+        closeQuiz();
+    } else {
+        quizFeedback.textContent += " - Incorrect. Try again.";
+    }
+
+    isRecognizing = false; // Reset the flag after processing the result
+};
+
+// Handle Speech Recognition Errors
+recognizer.onerror = function (event) {
+    quizFeedback.textContent = `Error: ${event.error}`;
+    isRecognizing = false; // Reset the flag on error
+};
+
+
+// Open Quiz Modal
+function openQuiz() {
+    const randomQuiz = quizQuestions[Math.floor(Math.random() * quizQuestions.length)];
+    quizQuestion.textContent = randomQuiz.question;
+    quizFeedback.textContent = "";
+    quizModal.classList.add("visible");
+    overlay.classList.add("visible");
+    gamePaused = true; // Pause the game during the quiz
+
+    // Handle Speech Recognition
+    startSpeech.onclick = function () {
+        quizFeedback.textContent = "Listening...";
+        recognizer.start();
+        recognizer.onresult = function (event) {
+            const spokenAnswer = event.results[0][0].transcript.trim().toLowerCase();
+            quizFeedback.textContent = `You said: "${spokenAnswer}"`;
+
+            if (spokenAnswer === randomQuiz.answer.toLowerCase()) {
+                quizFeedback.textContent += " - Correct!";
+                canJump = true;
+                closeQuiz();
+            } else {
+                quizFeedback.textContent += " - Incorrect. Try again.";
+            }
+        };
+        recognizer.onerror = function (event) {
+            quizFeedback.textContent = `Error: ${event.error}`;
+        };
+    };
+}
+
+// Close Quiz Modal
+function closeQuiz() {
+    quizModal.classList.remove("visible");
+    overlay.classList.remove("visible");
+    gamePaused = false; // Resume the game after the quiz
+}
+
+// Dino Jump
+function jump() {
+    if (canJump && !dino.jumping) {
+        dino.jumping = true;
+        dino.velocityY = -10;
+        canJump = false;
+    }
+}
+
+// Create Obstacles
+function createObstacle() {
+    obstacles.push({ x: canvas.width, y: 150, width: 20, height: 20, quizTriggered: false });
+}
+
+// Game Loop
+function gameLoop() {
+    if (gamePaused) return; // Skip the game loop if the game is paused
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw Dino
+    ctx.fillStyle = "green";
+    ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+
+    // Apply Gravity
+    if (dino.jumping) {
+        dino.velocityY += gravity;
+        dino.y += dino.velocityY;
+        if (dino.y >= 150) {
+            dino.jumping = false;
+            dino.y = 150;
+        }
+    }
+
+    // Draw Obstacles
+    obstacles.forEach((obstacle, index) => {
+        obstacle.x -= gameSpeed;
+
+        // Draw obstacle
+        ctx.fillStyle = "red";
+        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+
+        // Check for collision
+        if (
+            dino.x < obstacle.x + obstacle.width &&
+            dino.x + dino.width > obstacle.x &&
+            dino.y < obstacle.y + obstacle.height &&
+            dino.y + dino.height > obstacle.y
+        ) {
+            alert("Game Over!");
+            obstacles = [];
+            score = 0;
+            return;
+        }
+
+        // Trigger Quiz
+        if (obstacle.x <= 600 && !obstacle.quizTriggered) {
+            obstacle.quizTriggered = true; // Ensure quiz is triggered only once for this obstacle
+            openQuiz();
+        }
+
+        // Remove off-screen obstacles
+        if (obstacle.x + obstacle.width < 0) {
+            obstacles.splice(index, 1);
+            score++;
+        }
+    });
+
+    // Display Score
+    ctx.fillStyle = "black";
+    ctx.font = "20px Arial";
+    ctx.fillText(`Score: ${score}`, 10, 20);
+
+    requestAnimationFrame(gameLoop);
+}
+
+// Start Game
+document.addEventListener("keydown", (e) => {
+    if (e.code === "Space") {
+        jump();
+    }
+});
+
+setInterval(createObstacle, 2000); // Generate obstacles every 2 seconds
+gameLoop();
+
+    </script>
+</body>
+</html>
