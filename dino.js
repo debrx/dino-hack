@@ -211,7 +211,13 @@ const quizQuestions = [
     { question: "How do you get the most alpha jawline?", correctAnswer: "Mewing" },
     { question: "What is the most delectable part of a pookie?", correctAnswer: "Gyatt" },
     { question: "Which wolf in the pack has the most rizz?", correctAnswer: "Alpha" },
-    { question: "What happens to your food if you become a bigback?", correctAnswer: "Fanum tax" }
+    { question: "What happens to your food if you become a bigback?", correctAnswer: "Fanum tax" },
+    {question: "What is the best drink you’ve ever had?", correctAnswer: "prime"},
+    {question: "Fill in the blank (with the correct 2024 word): He pulls all the girls in with his ____.", correctAnswer: "Rizz"},
+    {question: "Finish the quote: Just put the ___ in the bag.", correctAnswer: "fries"},
+    {question: "What is the opposite of a sigma?", correctAnswer: "beta"},
+    {question: "Who should you stick your gyatt out for", correctAnswer: "the rizzler"},
+
 ];
 
 function askQuiz() {
@@ -220,6 +226,7 @@ function askQuiz() {
     const selectedQuiz = quizQuestions[randomIndex];
     const question = selectedQuiz.question;
     const correctAnswer = selectedQuiz.correctAnswer.toLowerCase();
+
 
     // Prompt the player with the question
     const playerAnswer = prompt(question, "Enter your answer").toLowerCase();
@@ -232,6 +239,7 @@ function askQuiz() {
         alert("Wrong answer. Try again!");
         canJump = false; // Block jumping
     }
+
 }
 
 
@@ -242,6 +250,7 @@ document.addEventListener('keydown', function(event) {
       canJump = false; // Reset flag after jumping
   } else if (Runner.keycodes.JUMP[event.keyCode] && !canJump) {
       alert("Answer the quiz correctly to jump!");
+      askQuiz();
   } else if (Runner.keycodes.DUCK[event.keyCode]) {
       trex.startDuck(); // Duck action remains unaffected
   } else if (Runner.keycodes.RESTART[event.keyCode]) {
